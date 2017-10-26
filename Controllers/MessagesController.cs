@@ -13,11 +13,13 @@ namespace PowerBot.Controllers
     [BotAuthentication]
     public class MessagesController : Controller
     {
-        private readonly LuisOptions _options;
+        private readonly LuisOptions _luisOptions;
+        private readonly QnAOptions _qnaOptions;
 
-        public MessagesController(IOptions<LuisOptions> optionsAccessor)
+        public MessagesController(IOptions<LuisOptions> luisOptions, IOptions<QnAOptions> qnaOptions)
         {
-            _options = optionsAccessor.Value;
+            _luisOptions = luisOptions.Value;
+            _qnaOptions = qnaOptions.Value;
         }
 
         /// <summary>
@@ -29,7 +31,7 @@ namespace PowerBot.Controllers
         {
             if (activity?.Type == ActivityTypes.Message)
             {
-                await Conversation.SendAsync(activity, () => new Dialogs.LuisDialog(_options.GetModel()));
+                await Conversation.SendAsync(activity, () => new Dialogs.QnADialog(_qnaOptions.GetModel()));
             }
             else
             {

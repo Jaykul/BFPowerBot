@@ -41,8 +41,9 @@ namespace PowerBot
                     options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                 });
 
-            // Register the IConfiguration instance which MyOptions binds against.
+            // Register the secrets
             services.Configure<Models.LuisOptions>(Configuration);
+            services.Configure<Models.QnAOptions>(Configuration);
 
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings()
             {

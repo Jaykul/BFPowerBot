@@ -11,9 +11,6 @@ namespace PowerBot.Models
         public string LuisAppId { get; set; }
         public string LuisAPIKey { get; set; }
 
-        public ILuisModel GetModel()
-        {
-            return new LuisModelAttribute(LuisAppId, LuisAPIKey);
-        }
+        public ILuisModel GetModel() => new LuisModelAttribute(LuisAppId, LuisAPIKey);
     }
 }
