@@ -17,6 +17,12 @@ namespace PowerBot
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
+
+            if (env.IsDevelopment())
+            {
+                builder.AddUserSecrets<Startup>();
+            }
+
             Configuration = builder.Build();
         }
 
@@ -34,6 +40,9 @@ namespace PowerBot
                     options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
                     options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                 });
+
+            // Register the IConfiguration instance which MyOptions binds against.
+            services.Configure<Models.LuisOptions>(Configuration);
 
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings()
             {

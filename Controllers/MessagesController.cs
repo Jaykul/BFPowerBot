@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using PowerBot.Models;
 
 namespace PowerBot.Controllers
 {
@@ -11,6 +13,13 @@ namespace PowerBot.Controllers
     [BotAuthentication]
     public class MessagesController : Controller
     {
+        private readonly LuisOptions _options;
+
+        public MessagesController(IOptions<LuisOptions> optionsAccessor)
+        {
+            _options = optionsAccessor.Value;
+        }
+
         /// <summary>
         /// POST: api/Messages
         /// Receive a message from a user and reply to it
@@ -20,7 +29,7 @@ namespace PowerBot.Controllers
         {
             if (activity?.Type == ActivityTypes.Message)
             {
-                await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
+                await Conversation.SendAsync(activity, () => new Dialogs.LuisDialog(_options.GetModel()));
             }
             else
             {
